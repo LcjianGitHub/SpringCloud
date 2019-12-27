@@ -30,6 +30,7 @@ public class HelloController {
     public String getInfo(){
         ServiceInstance instance = client.getLocalServiceInstance();
         logger.info("/hello,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
+        System.out.println("ceshi");
         return "hello world !";
     }
 }
