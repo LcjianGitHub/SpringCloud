@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.asiainfo.cloud.app.mapper.HuaBeiSaveMapper">
+    <insert id="saveMsg" parameterType="com.asiainfo.cloud.app.entity.dto.HuaBeiSaveInfo">
+insert into TF_SM_OUTORDER_RESULT_LOG t
+(T.TRADE_ID,
+       T.EPARCHY_CODE,
+       T.CHANNEL_CODE,
+       T.NET_TYPE_CODE,
+       T.SERIAL_NUMBER,
+       T.NOTIFY_TYPE,
+       T.ACT_ID,
+       T.ACT_NAME,
+       T.USER_ACT_START_TIME,
+       T.USER_ACT_END_TIME,
+       T.ORGANIZER,
+       T.RES_ID,
+       T.RES_NAME,
+       T.UNSUBSCRIBE_TYPE,
+       T.ORDER_TIME,
+       T.CREATE_TIME)
+values(
+       #{tradeId},
+       #{eparchyCode},
+       #{channelCode},
+       #{netTypeCode},
+       #{serialNumber},
+       #{notifyType},
+       #{actId},
+       #{actName},
+       #{userActStartTime},
+       #{userActEndTime},
+       #{organizer},
+       #{resId},
+       #{resName},
+       #{unsubscribeType},
+       #{orderTime},
+       SYSDATE
+)
+    </insert>
+
+    <select id="searchMsg" resultType="java.util.Map">
+         select t.TRADE_ID from TF_SM_OUTORDER_RESULT_LOG t where t.TRADE_ID=#{tradeId,jdbcType=VARCHAR}
+    </select>
+
+       <insert id="saveErrMsg" parameterType="com.asiainfo.cloud.app.entity.dto.HuaBeiSaveInfo">
+insert into TF_SM_OUTORDER_RESULT_ERR_LOG t
+(T.TRADE_ID,
+       T.EPARCHY_CODE,
+       T.CHANNEL_CODE,
+       T.NET_TYPE_CODE,
+       T.SERIAL_NUMBER,
+       T.NOTIFY_TYPE,
+       T.ACT_ID,
+       T.ACT_NAME,
+       T.USER_ACT_START_TIME,
+       T.USER_ACT_END_TIME,
+       T.ORGANIZER,
+       T.RES_ID,
+       T.RES_NAME,
+       T.UNSUBSCRIBE_TYPE,
+       T.ORDER_TIME,
+       T.CREATE_TIME,
+       T.SOURCE_SYSID,
+       T.ERR_CODE)
+values(
+       #{tradeId},
+       #{eparchyCode},
+       #{channelCode},
+       #{netTypeCode},
+       #{serialNumber},
+       #{notifyType},
+       #{actId},
+       #{actName},
+       #{userActStartTime},
+       #{userActEndTime},
+       #{organizer},
+       #{resId},
+       #{resName},
+       #{unsubscribeType},
+       #{orderTime},
+       SYSDATE,
+       '001',
+       #{errCode}
+)
+    </insert>
+
+       <update id="updateMsg">
+update tf_sm_periphery_user_action t
+   set t.demand_end_date = sysdate
+ where t.serial_number = #{serialNumber,jdbcType=VARCHAR}
+   and t.object_id in (select a.object_id from TD_HUABEI_OBJECT_MSG a)
+       </update>
+</mapper>
